@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extractor de Boletas Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-receipt"></i> SmartReceipt</h1>
+            <p>Sube la foto de tu boleta para extraer y almacenar la información automáticamente.</p>
+        </header>
+
+        <main class="dashboard">
+            <section class="upload-section">
+                <div class="card">
+                    <h2>1. Cargar Boleta</h2>
+                    <div class="drop-zone" id="drop-zone">
+                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                        <p>Arrastra tu imagen aquí o <span class="browse-btn">explora archivos</span></p>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                    </div>
+                    <div class="preview-container hidden" id="preview-container">
+                        <h3>Vista Previa</h3>
+                        <img id="image-preview" src="" alt="Previsualización de la boleta">
+                        <button id="process-btn" class="btn primary-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Procesar Boleta</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="results-section">
+                <div class="card">
+                    <h2>2. Información Extraída</h2>
+                    <div id="loader" class="loader hidden">
+                        <div class="spinner"></div>
+                        <p>Analizando documento con IA...</p>
+                    </div>
+                    
+                    <form id="receipt-form">
+                        <div class="form-group">
+                            <label for="field-commerce">Comercio / Empresa</label>
+                            <input type="text" id="field-commerce" placeholder="Ej. Supermercado Acme" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="field-date">Fecha</label>
+                                <input type="date" id="field-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="field-payment">Medio de Pago</label>
+                                <select id="field-payment">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                    <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Otro">Otro / No detectado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-items">Ítems / Detalle (Opcional)</label>
+                            <textarea id="field-items" rows="3" placeholder="Ej. 1x Café ($2.500), 1x Galletas ($1.200)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-total">Total ($)</label>
+                            <input type="number" id="field-total" placeholder="0.00" required step="any">
+                        </div>
+                        
+                        <div id="form-alert" class="alert hidden"></div>
+
+                        <button type="submit" class="btn success-btn" id="save-btn" disabled>
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar en Base de Datos
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <section class="history-section">
+            <div class="card">
+                <div class="history-header">
+                    <h2><i class="fa-solid fa-database"></i> Registros Guardados (Base de Datos)</h2>
+                    <button id="refresh-btn" class="btn secondary-btn"><i class="fa-solid fa-rotate"></i> Sincronizar</button>
+                </div>
+                <div class="table-container">
+                    <table id="records-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Comercio</th>
+                                <th>Detalle</th>
+                                <th>Pago</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records-body">
+                            <tr>
+                                <td colspan="6" class="empty-state">No hay registros guardados aún.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
